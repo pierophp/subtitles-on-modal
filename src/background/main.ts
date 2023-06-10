@@ -22,6 +22,9 @@ const callback = async function (details: any) {
     return;
   }
 
+  // eslint-disable-next-line no-console
+  console.info("Download URL", details.url);
+
   if (!details.url.endsWith(".vtt")) {
     return;
   }
@@ -70,8 +73,7 @@ const callback = async function (details: any) {
 };
 
 const filter: WebRequest.RequestFilter = {
-  urls: ["https://download-a.akamaihd.net/*"],
-  types: ["xmlhttprequest"],
+  urls: ["*://*/*.vtt"],
 };
 const opt_extraInfoSpec: any[] = [];
 

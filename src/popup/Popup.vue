@@ -5,5 +5,7 @@
 </script>
 
 <template>
-  <main class="w-[300px] px-4 py-5 text-center text-gray-700">JW Extended</main>
+  <main class="w-[300px] px-4 py-5 text-center text-gray-700">
+    Subtitles on Modal
+  </main>
 </template>

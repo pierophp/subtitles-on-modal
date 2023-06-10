@@ -13,7 +13,7 @@ export async function getManifest() {
     name: pkg.displayName || pkg.name,
     version: pkg.version,
     description: pkg.description,
-    browser_action: {
+    action: {
       default_icon: "./assets/icon-512.png",
       default_popup: "./dist/popup/index.html",
     },
@@ -35,14 +35,15 @@ export async function getManifest() {
       128: "./assets/icon-512.png",
     },
     permissions: [
-      "tabs",
-      "storage",
-      "activeTab",
+      // "tabs",
+      // "storage",
+      // "activeTab",
       "webRequest",
+      "*://*/*.vtt",
       // "https://*.jw.org/",
       // "https://download-a.akamaihd.net/",
     ],
-    host_permissions: ["*://*/*"],
+    host_permissions: ["*://*/*.vtt"],
     content_scripts: [
       {
         matches: ["<all_urls>"],
