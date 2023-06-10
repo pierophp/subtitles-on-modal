@@ -1,54 +1,78 @@
-import { onMessage, sendMessage } from 'webext-bridge/background'
-import type { Tabs } from 'webextension-polyfill'
+import { sendMessage } from "webext-bridge/background";
+import type { WebRequest } from "webextension-polyfill";
+
+/**
+ * TO SEE THE LOGS FROM BACKGROUND.JS
+ * GO TO MANAGE EXTENSIONS
+ * ENABLE DEVELOPER MODE
+ * INSPECT VIEW
+ * https://stackoverflow.com/questions/10257301/accessing-console-and-devtools-of-extensions-background-js#:~:text=To%20view%20the%20correct%20console,or%20service%20worker%20(ManifestV3).
+ */
 
 // only on dev mode
 if (import.meta.hot) {
   // @ts-expect-error for background HMR
-  import('/@vite/client')
+  import("/@vite/client");
   // load latest content script
-  import('./contentScriptHMR')
+  import("./contentScriptHMR");
 }
 
-browser.runtime.onInstalled.addListener((): void => {
-  // eslint-disable-next-line no-console
-  console.log('Extension installed')
-})
-
-let previousTabId = 0
-
-// communication example: send previous tab title from background page
-// see shim.d.ts for type declaration
-browser.tabs.onActivated.addListener(async ({ tabId }) => {
-  if (!previousTabId) {
-    previousTabId = tabId
-    return
+const callback = async function (details: any) {
+  if (details.url.startsWith("chrome-extension:")) {
+    return;
   }
 
-  let tab: Tabs.Tab
-
-  try {
-    tab = await browser.tabs.get(previousTabId)
-    previousTabId = tabId
-  }
-  catch {
-    return
+  if (!details.url.endsWith(".vtt")) {
+    return;
   }
 
-  // eslint-disable-next-line no-console
-  console.log('previous tab', tab)
-  sendMessage('tab-prev', { title: tab.title }, { context: 'content-script', tabId })
-})
+  const response = await fetch(`${details.url}?ajax=1`);
 
-onMessage('get-current-tab', async () => {
-  try {
-    const tab = await browser.tabs.get(previousTabId)
-    return {
-      title: tab?.title,
+  const body = await response.text();
+
+  const lines = body.split("\r\n").filter((item) => {
+    if (item === "WEBVTT") {
+      return false;
+    }
+
+    if (!item) {
+      return false;
+    }
+
+    if (item.includes("-->")) {
+      return false;
+    }
+
+    return true;
+  });
+
+  const newLines = [];
+  const endingCharaters = [".", "?", "？"];
+  let i = 0;
+  for (const line of lines) {
+    const lastCharacter = line.trim().slice(-1);
+    if (!newLines[i]) {
+      newLines[i] = line.trim();
+    } else {
+      newLines[i] += ` ${line.trim()}`;
+    }
+
+    if (endingCharaters.includes(lastCharacter)) {
+      i++;
     }
   }
-  catch {
-    return {
-      title: undefined,
-    }
-  }
-})
+
+  sendMessage(
+    "subtitle",
+    { lines: newLines },
+    { context: "content-script", tabId: details.tabId }
+  );
+};
+
+const filter: WebRequest.RequestFilter = {
+  urls: ["https://download-a.akamaihd.net/*"],
+  types: ["xmlhttprequest"],
+};
+const opt_extraInfoSpec: any[] = [];
+
+browser.webRequest.onCompleted.addListener(callback, filter, opt_extraInfoSpec);
