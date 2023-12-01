@@ -1,0 +1,21 @@
+name: Google Chrome build
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    name: Build and Generate Artifact
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Yarn Install
+        run: yarn install
+
+      - name: Build
+        run: yarn build
+      
+      - name: Pack
+        run: yarn pack:crx
