@@ -27,26 +27,6 @@ jobs:
       - name: Pack Xpi
         run: pnpm run pack:xpi
       
-      - name: upload chrome artifact
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./extension.crx
-          asset_name: subtitles-on-modal-chrome.crx
-          asset_content_type: application/gzip
-      
-      - name: upload firefox artifact
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./extension.xpi
-          asset_name: subtitles-on-modal-firefox.xpi
-          asset_content_type: application/gzip
-
       - name: Create Release
         uses: actions/create-release@v1
         id: create_release
@@ -57,3 +37,13 @@ jobs:
           tag_name: ${{ github.ref }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
+
+      - name: upload firefox artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./extension.xpi
+          asset_name: subtitles-on-modal-firefox.xpi
+          asset_content_type: application/gzip
