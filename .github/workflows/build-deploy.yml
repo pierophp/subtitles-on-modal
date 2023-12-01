@@ -11,11 +11,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Yarn Install
-        run: yarn install
+      - name: Install Deps
+        run: pnpm install
 
       - name: Build
-        run: yarn build
+        run: pnpm run build
       
       - name: Pack
-        run: yarn pack:crx
+        run: pnpm run  pack:crx
