@@ -50,12 +50,22 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN  }}
 
-      # - name: upload firefox artifact
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path: ./extension.xpi
-      #     asset_name: subtitles-on-modal-firefox.xpi
-      #     asset_content_type: application/gzip
+      - name: upload chrome artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./extension.crx
+          asset_name: subtitles-on-modal-chrome.crx
+          asset_content_type: application/gzip
+
+      - name: upload firefox artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./extension.xpi
+          asset_name: subtitles-on-modal-firefox.xpi
+          asset_content_type: application/gzip
