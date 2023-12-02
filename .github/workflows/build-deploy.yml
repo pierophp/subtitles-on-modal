@@ -26,24 +26,36 @@ jobs:
 
       - name: Pack Xpi
         run: pnpm run pack:xpi
-            
-      - name: Create Release
-        uses: actions/create-release@v1
-        id: create_release
-        with:
-          draft: false
-          prerelease: false
-          release_name: ${{ steps.version.outputs.version }}
-          tag_name: ${{ github.ref }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN  }}
 
-      - name: upload firefox artifact
-        uses: actions/upload-release-asset@v1
+      - name: Create release
+        uses: Roang-zero1/github-create-release-action@v2
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./extension.xpi
-          asset_name: subtitles-on-modal-firefox.xpi
-          asset_content_type: application/gzip
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+
+      # - name: Upload release artifacts
+      #   uses: Roang-zero1/github-upload-release-artifacts-action@v2
+      #   with:
+      #     args: "dist/bin/ dist/shell/compiled.sh"
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            
+      # - name: Create Release
+      #   uses: actions/create-release@v1
+      #   id: create_release
+      #   with:
+      #     draft: false
+      #     prerelease: false
+      #     release_name: ${{ steps.version.outputs.version }}
+      #     tag_name: ${{ github.ref }}
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN  }}
+
+      # - name: upload firefox artifact
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: ./extension.xpi
+      #     asset_name: subtitles-on-modal-firefox.xpi
+      #     asset_content_type: application/gzip
