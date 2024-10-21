@@ -11,21 +11,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
       - name: Install Deps
-        run: pnpm install
+        run: npm install
 
       - name: Build
-        run: pnpm run build
-      
+        run: npm run build
+
       - name: Pack Crx
-        run: pnpm run pack:crx
+        run: npm run pack:crx
 
       - name: Pack Xpi
-        run: pnpm run pack:xpi
+        run: npm run pack:xpi
 
       # - name: Create release
       #   uses: Roang-zero1/github-create-release-action@v2
@@ -38,7 +34,7 @@ jobs:
       #     args: "dist/bin/ dist/shell/compiled.sh"
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            
+
       - name: Create Release
         uses: actions/create-release@v1
         id: create_release

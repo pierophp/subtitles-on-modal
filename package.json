@@ -3,7 +3,7 @@
   "displayName": "Subtitles on Modal",
   "version": "0.0.1",
   "private": true,
-  "packageManager": "pnpm@8.3.1",
+  "packageManager": "npm@9.6.4",
   "description": "[description]",
   "scripts": {
     "dev": "npm run clear && cross-env NODE_ENV=development run-p dev:*",
@@ -26,6 +26,7 @@
     "start:firefox-developer": "web-ext run --source-dir ./extension --target=firefox-desktop --firefox-binary=\"C:\\Program Files\\Firefox Developer Edition\\firefox.exe\"",
     "clear": "rimraf --glob extension/dist extension/manifest.json extension.*",
     "lint": "eslint --cache .",
+    "lint-staged": "eslint --fix",
     "test": "vitest test",
     "test:e2e": "playwright test",
     "postinstall": "simple-git-hooks",
@@ -72,9 +73,9 @@
     "webextension-polyfill": "^0.10.0"
   },
   "simple-git-hooks": {
-    "pre-commit": "pnpm lint-staged"
+    "pre-commit": "npm run lint-staged"
   },
-  "lint-staged": {
-    "*": "eslint --fix"
+  "volta": {
+    "node": "20.18.0"
   }
 }

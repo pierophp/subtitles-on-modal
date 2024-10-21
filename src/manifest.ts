@@ -39,9 +39,6 @@ export async function getManifest() {
       // "storage",
       // "activeTab",
       "webRequest",
-      "*://*/*.vtt",
-      // "https://*.jw.org/",
-      // "https://download-a.akamaihd.net/",
     ],
     host_permissions: ["*://*/*.vtt"],
     content_scripts: [
